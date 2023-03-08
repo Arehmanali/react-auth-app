@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles } from "@mui/styles";
+import PageContext from "../../context/PageContext";
 
-const EditableTextField = () => {
+const EditableTextField = ({ type }) => {
+  const { handleTitleChange } = useContext(PageContext);
   const classes = useStyles();
-  const [value, setValue] = useState("Add Here");
+  const [value, setValue] = useState();
   const [editingValue, setEditingValue] = useState();
 
   const onChange = (event) => setEditingValue(event.target.value);
@@ -23,11 +25,13 @@ const EditableTextField = () => {
   };
   return (
     <input
-      className={classes.input}
+      className={type === "header" ? classes.inputHeader : classes.inputField}
+      placeholder={type === "header" ? "Add Header Text" : "Add Field Text"}
       type="text"
-      aria-label="Field name"
+      aria-label={type === "header" ? "header" : "field"}
+      name={type === "header" ? "header" : "field"}
       value={editingValue}
-      onChange={onChange}
+      onChange={type === "header" ? handleTitleChange : onChange}
       onKeyDown={onKeyDown}
       onBlur={onBlur}
     />
@@ -35,12 +39,22 @@ const EditableTextField = () => {
 };
 
 const useStyles = makeStyles({
-  input: {
+  inputHeader: {
     backgroundColor: "transparent",
     border: 0,
+    fontSize: "34px",
+    fontWeight: 900,
     padding: "8px",
     "&:hover": {
-      backgroundColor: "#d3d3d3",
+      cursor: "pointer",
+    },
+  },
+  inputField: {
+    backgroundColor: "transparent",
+    border: 0,
+    fontSize: "18px",
+    padding: "8px",
+    "&:hover": {
       cursor: "pointer",
     },
   },

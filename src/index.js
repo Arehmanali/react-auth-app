@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthProvider } from "./context/AuthContext";
+import { PageProvider } from "./context/PageContext";
 import { BrowserRouter } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -11,7 +12,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <PageProvider>
+          <App />
+        </PageProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

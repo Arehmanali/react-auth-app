@@ -34,12 +34,7 @@ const Login = () => {
       );
     } catch ({ response }) {
       registerRequest = response;
-      if (registerRequest.status === 422)
-        setError(
-          Object.keys(registerRequest.data.errors) +
-            " " +
-            Object.values(registerRequest.data.errors)
-        );
+      setError(response.error);
     }
 
     const { data: registerRequestData } = registerRequest;
