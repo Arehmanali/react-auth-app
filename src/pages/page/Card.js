@@ -1,13 +1,15 @@
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import EditableTextField from "./EditableTextField";
+import { Box } from "@mui/material";
+import Delete from "@mui/icons-material/Delete";
 
 const style = {
   backgroundColor: "white",
   cursor: "move",
 };
 
-export const Card = ({ id, text, index, moveCard }) => {
+export const Card = ({ id, text, index, moveCard, onKeyDown, removeField }) => {
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
     accept: "card",
@@ -55,7 +57,21 @@ export const Card = ({ id, text, index, moveCard }) => {
   drag(drop(ref));
   return (
     <div ref={ref} style={{ ...style, opacity }} data-handler-id={handlerId}>
-      <EditableTextField type={"field"} />
+      <Box display="flex" justifylContent="space-around" alignItems="center">
+        <EditableTextField onKeyDown={onKeyDown} />
+        <Delete
+          onClick={(e) => removeField(e, id)}
+          fontSize="small"
+          sx={{
+            ml: 1,
+            color: "grey",
+            "&:hover": {
+              color: "red",
+              cursor: "pointer",
+            },
+          }}
+        />
+      </Box>
     </div>
   );
 };

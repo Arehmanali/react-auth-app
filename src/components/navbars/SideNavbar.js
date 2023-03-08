@@ -21,9 +21,8 @@ const drawerWidth = 240;
 
 const SideNavbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
-  const { untitledPage, pages, addNewPage, setPages } = useContext(PageContext);
-
-  useEffect(() => {}, [untitledPage]);
+  const { pages, addNewPage, removePage, handleClick } =
+    useContext(PageContext);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -49,9 +48,32 @@ const SideNavbar = () => {
           {pages &&
             pages.map((text, index) => (
               <ListItem key={text} display="flex" justifyContent="space-around">
-                <ListItemText disablePadding primary={text.name} />
+                <ListItemText
+                  disablePadding
+                  onClick={(e) => handleClick(e, text.id)}
+                  primary={text.name}
+                  sx={{
+                    "&:hover": {
+                      color: "blue",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
                 <ListItemIcon>
-                  <Delete />
+                  <Delete
+                    onClick={(e) => {
+                      removePage(e, text.id);
+                    }}
+                    fontSize="small"
+                    sx={{
+                      ml: 1,
+                      color: "grey",
+                      "&:hover": {
+                        color: "red",
+                        cursor: "pointer",
+                      },
+                    }}
+                  />
                 </ListItemIcon>
               </ListItem>
             ))}

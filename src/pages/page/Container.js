@@ -1,41 +1,36 @@
 import update from "immutability-helper";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
+import PageContext from "../../context/PageContext.js";
 import { Card } from "./Card.js";
 
 const style = {
   width: 400,
 };
 export const Container = () => {
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      text: "Write a cool JS library",
+  const { fields, moveField, onKeyDownField, removeField } =
+    useContext(PageContext);
+
+  const { page } = useContext(PageContext);
+
+  const renderCard = useCallback(
+    (card, index) => {
+      return (
+        <Card
+          key={card.id}
+          index={index}
+          id={card.id}
+          text={card.text}
+          moveCard={moveField}
+          onKeyDown={onKeyDownField}
+          removeField={removeField}
+        />
+      );
     },
-  ]);
-  const moveCard = useCallback((dragIndex, hoverIndex) => {
-    setCards((prevCards) =>
-      update(prevCards, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, prevCards[dragIndex]],
-        ],
-      })
-    );
-  }, []);
-  const renderCard = useCallback((card, index) => {
-    return (
-      <Card
-        key={card.id}
-        index={index}
-        id={card.id}
-        text={card.text}
-        moveCard={moveCard}
-      />
-    );
-  }, []);
+    [fields]
+  );
   return (
     <>
-      <div style={style}>{cards.map((card, i) => renderCard(card, i))}</div>
+      <div style={style}>{fields.map((card, i) => renderCard(card, i))}</div>
     </>
   );
 };
