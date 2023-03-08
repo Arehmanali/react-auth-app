@@ -1,7 +1,7 @@
 export const config = {
   SERVER_URL:
     process.env.REACT_APP_NODE_ENV === "development"
-      ? "http://localhost:3020"
+      ? "http://localhost:8900"
       : process.env.REACT_APP_SERVER_URL,
 };
 

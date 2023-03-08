@@ -1,12 +1,59 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, TextField, Grid, Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import axios from "axios";
+import config from "../../config";
+import AuthContext from "../../context/AuthContext";
 
 const Signup = () => {
   const classes = useStyles();
+  const { responseErrors } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [error, setError] = useState({
+    password: "",
+    confirmPassword: "",
+    responseMessage: responseErrors && responseErrors,
+  });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const fields = ["name", "email", "password"];
+    const formElements = e.target.elements;
+
+    const formValues = fields
+      .map((field) => ({
+        [field]: formElements.namedItem(field).value,
+      }))
+      .reduce((current, next) => ({ ...current, ...next }));
+    let registerRequest;
+    try {
+      registerRequest = await axios.post(
+        `${config.SERVER_URL}/api/v1/auth/register`,
+        {
+          name: formValues.name,
+          email: formValues.email,
+          password: formValues.password,
+        }
+      );
+    } catch ({ response }) {
+      console.log(response);
+      registerRequest = response;
+      if (registerRequest.status === 422) {
+        setError({
+          ...error,
+          responseMessage:
+            registerRequest.data.errors &&
+            Object.keys(registerRequest.data.errors) +
+              " " +
+              Object.values(registerRequest.data.errors),
+        });
+      }
+    }
+    if (registerRequest.status === 200) {
+      return navigate("/login");
+    }
   };
 
   return (
@@ -60,7 +107,7 @@ const Signup = () => {
                         type="email"
                         placeholder="Email"
                         fullWidth
-                        name="username"
+                        name="email"
                         variant="outlined"
                         required
                         autoFocus
