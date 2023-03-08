@@ -1,25 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useState } from "react";
+import AuthContext from "./context/AuthContext.js";
+import AuthLayout from "./components/layouts/AuthLayout";
+import UserLayout from "./components/layouts/UserLayout";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+  const { isLoggedIn, setIsLoggedIn } = useState(false);
+
+  const Layout = isLoggedIn ? <UserLayout /> : <AuthLayout />;
+  return <>{Layout}</>;
+};
 
 export default App;
