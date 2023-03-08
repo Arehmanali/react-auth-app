@@ -8,6 +8,7 @@ import Footer from "./components/footers/Footer.js";
 import Home from "./pages/home/Home.js";
 
 const App = () => {
+<<<<<<< Updated upstream
   let { isLoggedIn } = useContext(AuthContext);
   return (
     <>
@@ -21,6 +22,12 @@ const App = () => {
       {isLoggedIn ? "" : <Footer />}
     </>
   );
+=======
+  const { isLoggedIn, setIsLoggedIn } = useState(true);
+
+  const Layout = isLoggedIn ? <AuthLayout /> : <UserLayout />;
+  return <>{Layout}</>;
+>>>>>>> Stashed changes
 };
 
 export default App;

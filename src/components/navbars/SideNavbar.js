@@ -63,10 +63,6 @@ const SideNavbar = () => {
           </ListItem>
         </List>
       </Drawer>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-      ></Box>
     </Box>
   );
 };
