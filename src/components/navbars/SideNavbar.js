@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,10 +11,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Add from "@mui/icons-material/Add";
 import ExitToApp from "@mui/icons-material/ExitToApp";
+import AuthContext from "../../context/AuthContext";
+import { Button } from "@mui/material";
 
 const drawerWidth = 240;
 
 const SideNavbar = () => {
+  const { user, logoutUser } = useContext(AuthContext);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -31,7 +34,7 @@ const SideNavbar = () => {
         anchor="left"
       >
         <Toolbar>
-          <Typography>Username</Typography>
+          <Typography>{user.name}</Typography>
         </Toolbar>
 
         <Divider />
@@ -47,7 +50,12 @@ const SideNavbar = () => {
         </List>
 
         <List sx={{ bottom: 0, position: "fixed" }}>
-          <ListItem key={"logout"} disablePadding>
+          <ListItem
+            components={Button}
+            onClick={logoutUser}
+            key={"logout"}
+            disablePadding
+          >
             <ListItemButton disablePadding>
               <ExitToApp />
               <ListItemText disablePadding sx={{ ml: 1 }} primary={"Logout"} />

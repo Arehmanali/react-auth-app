@@ -14,33 +14,25 @@ export const AuthProvider = ({ children }) => {
       typeof window !== "undefined" ? JSON.parse(localStrUser) : null;
   }
   const [user, setUser] = useState(localStorageUser ? localStorageUser : {});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [responseErrors, setResponseErrors] = useState("");
-  const navigate = useNavigate();
 
   const logoutUser = async () => {
     setUser(null);
+    setIsLoggedIn(false);
     window.localStorage.clear("user");
-    let registerRequest;
-    try {
-      registerRequest = await axios.delete(
-        `${config.SERVER_URL}/api/users/sign_out`
-      );
-    } catch ({ response }) {
-      registerRequest = response;
-    }
-    if (registerRequest.status === 204) {
-      navigate("/");
-    }
   };
 
   const updateUser = async (data) => {
     setUser(data);
     window.localStorage.clear("user");
     window.localStorage.setItem("user", JSON.stringify({ ...data }));
+    setIsLoggedIn(true);
   };
 
   const contextData = {
     user: user,
+    isLoggedIn,
     responseErrors,
     updateUser: updateUser,
     logoutUser: logoutUser,
