@@ -1,15 +1,16 @@
-import React from "react";
-import { Box, Typography, Tooltip } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import React, { useContext } from "react";
+import { Box } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Container } from "./Container";
-import EditableTextField from "./EditableTextField";
+import Edit from "@mui/icons-material/Edit";
+import HeaderTextField from "./HeaderTextField";
+import PageContext from "../../context/PageContext";
 
 const Page = () => {
-  const classes = useStyles();
+  const { EditExistingPage, isOpen } = useContext(PageContext);
 
-  return (
+  return isOpen ? (
     <Box
       display="flex"
       justifyContent="center"
@@ -17,30 +18,33 @@ const Page = () => {
       flexDirection={"column"}
       sx={{ mt: 10 }}
     >
-      <Tooltip title="Add" placement="left-start">
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 900,
-            textDecoration: "none",
-            color: "black",
-          }}
-          display="inline"
-        >
-          <EditableTextField />
-        </Typography>
-      </Tooltip>
+      <form onSubmit={EditExistingPage}>
+        <Box display="flex" justifylContent="space-around" alignItems="center">
+          <HeaderTextField />
+          <Edit
+            fontSize="medium"
+            sx={{
+              ml: 1,
+              color: "grey",
+              "&:hover": {
+                color: "green",
+                cursor: "pointer",
+              },
+            }}
+          />
+        </Box>
 
-      <hr />
-      <div>
-        <DndProvider backend={HTML5Backend}>
-          <Container />
-        </DndProvider>
-      </div>
+        <hr />
+        <div>
+          <DndProvider backend={HTML5Backend}>
+            <Container />
+          </DndProvider>
+        </div>
+      </form>
     </Box>
+  ) : (
+    ""
   );
 };
-
-const useStyles = makeStyles({});
 
 export default Page;

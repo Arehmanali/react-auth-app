@@ -1,46 +1,38 @@
 import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
 
-const EditableTextField = () => {
+const EditableTextField = ({ text, onKeyDown }) => {
   const classes = useStyles();
-  const [value, setValue] = useState("Add Here");
-  const [editingValue, setEditingValue] = useState();
+  const [field, setField] = useState(text);
 
-  const onChange = (event) => setEditingValue(event.target.value);
-
-  const onKeyDown = (event) => {
-    if (event.key === "Enter" || event.key === "Escape") {
-      event.target.blur();
-    }
+  const handleFieldChange = (e) => {
+    e.preventDefault();
+    setField(e.target.value);
   };
 
-  const onBlur = (event) => {
-    if (event.target.value.trim() === "") {
-      setEditingValue(value);
-    } else {
-      setValue(event.target.value);
-    }
-  };
   return (
-    <input
-      className={classes.input}
-      type="text"
-      aria-label="Field name"
-      value={editingValue}
-      onChange={onChange}
-      onKeyDown={onKeyDown}
-      onBlur={onBlur}
-    />
+    <>
+      <input
+        className={classes.inputField}
+        placeholder={"Add Field Text"}
+        type="text"
+        aria-label={"field"}
+        name={"field"}
+        value={field}
+        onChange={handleFieldChange}
+        onKeyDown={onKeyDown}
+      />
+    </>
   );
 };
 
 const useStyles = makeStyles({
-  input: {
+  inputField: {
     backgroundColor: "transparent",
     border: 0,
+    fontSize: "18px",
     padding: "8px",
     "&:hover": {
-      backgroundColor: "#d3d3d3",
       cursor: "pointer",
     },
   },

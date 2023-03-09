@@ -1,44 +1,69 @@
-import update from "immutability-helper";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useEffect } from "react";
+import PageContext from "../../context/PageContext.js";
 import { Card } from "./Card.js";
-const style = {
-  width: 400,
-};
+import Add from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
+
 export const Container = () => {
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      text: "Write a cool JS library",
+  const {
+    fields,
+    moveField,
+    onKeyDownField,
+    removeField,
+    addNewField,
+    updateFields,
+  } = useContext(PageContext);
+
+  useEffect(() => {
+    const setTheSorting = () => {
+      const sortedArray = [];
+      if (fields && fields.length > 1) {
+        fields.map((field, index) =>
+          sortedArray.push({ ...field, sort_order: index })
+        );
+        updateFields(sortedArray);
+      }
+    };
+
+    setTheSorting();
+  }, [fields]);
+
+  const renderCard = useCallback(
+    (field, index) => {
+      return (
+        <Card
+          key={field.Id}
+          index={index}
+          id={field.Id}
+          text={field.name}
+          moveCard={moveField}
+          onKeyDown={(e) => onKeyDownField(e, field.Id)}
+          removeField={removeField}
+        />
+      );
     },
-    {
-      id: 2,
-      text: "Write a cool JS library",
-    },
-  ]);
-  const moveCard = useCallback((dragIndex, hoverIndex) => {
-    setCards((prevCards) =>
-      update(prevCards, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, prevCards[dragIndex]],
-        ],
-      })
-    );
-  }, []);
-  const renderCard = useCallback((card, index) => {
-    return (
-      <Card
-        key={card.id}
-        index={index}
-        id={card.id}
-        text={card.text}
-        moveCard={moveCard}
-      />
-    );
-  }, []);
+    [fields]
+  );
   return (
     <>
-      <div style={style}>{cards.map((card, i) => renderCard(card, i))}</div>
+      <div style={style}>{fields.map((card, i) => renderCard(card, i))}</div>
+      <Box display="flex" alignItems="center">
+        <Add
+          onClick={(e) => addNewField(e)}
+          fontSize="medium"
+          sx={{
+            color: "grey",
+            "&:hover": {
+              color: "green",
+              cursor: "pointer",
+            },
+          }}
+        />
+      </Box>
     </>
   );
+};
+
+const style = {
+  width: 400,
 };

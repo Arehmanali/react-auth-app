@@ -8,26 +8,23 @@ import Footer from "./components/footers/Footer.js";
 import Home from "./pages/home/Home.js";
 
 const App = () => {
-<<<<<<< Updated upstream
-  let { isLoggedIn } = useContext(AuthContext);
+  let { user } = useContext(AuthContext);
   return (
     <>
-      {isLoggedIn ? "" : <TopNavbar />}
+      {user && user.email ? "" : <TopNavbar />}
       <Routes>
-        <Route path="/login" index element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
-        <Route path="/" index element={isLoggedIn ? <Home /> : <Login />} />
+        <Route
+          path="/"
+          index
+          element={user && user.email ? <Home /> : <Login />}
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {isLoggedIn ? "" : <Footer />}
+      {user && user.email ? "" : <Footer />}
     </>
   );
-=======
-  const { isLoggedIn, setIsLoggedIn } = useState(true);
-
-  const Layout = isLoggedIn ? <AuthLayout /> : <UserLayout />;
-  return <>{Layout}</>;
->>>>>>> Stashed changes
 };
 
 export default App;

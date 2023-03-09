@@ -1,7 +1,4 @@
 import React, { createContext, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import config from "../config";
 
 const AuthContext = createContext();
 export default AuthContext;
@@ -14,12 +11,9 @@ export const AuthProvider = ({ children }) => {
       typeof window !== "undefined" ? JSON.parse(localStrUser) : null;
   }
   const [user, setUser] = useState(localStorageUser ? localStorageUser : {});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [responseErrors, setResponseErrors] = useState("");
 
   const logoutUser = async () => {
     setUser(null);
-    setIsLoggedIn(false);
     window.localStorage.clear("user");
   };
 
@@ -27,13 +21,10 @@ export const AuthProvider = ({ children }) => {
     setUser(data);
     window.localStorage.clear("user");
     window.localStorage.setItem("user", JSON.stringify({ ...data }));
-    setIsLoggedIn(true);
   };
 
   const contextData = {
     user: user,
-    isLoggedIn,
-    responseErrors,
     updateUser: updateUser,
     logoutUser: logoutUser,
   };
