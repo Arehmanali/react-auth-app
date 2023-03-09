@@ -31,6 +31,7 @@ export const PageProvider = ({ children }) => {
   const [pages, setPages] = useState([]);
   const [page, setPage] = useState(initialPages[0]);
   const [fields, setFields] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleTitleChange = (e) => {
     setPage({ ...page, name: e.target.value });
@@ -79,6 +80,7 @@ export const PageProvider = ({ children }) => {
       const copyPages = pages.filter((page) => page.Id !== id);
       setPages(copyPages);
     }
+    setIsOpen(!isOpen);
   };
 
   const getAllFieldByPage = async (page) => {
@@ -98,14 +100,14 @@ export const PageProvider = ({ children }) => {
 
     const { data: registerRequestData } = registerRequest;
     if (registerRequestData.status) {
-      // const sortedFields = registerRequestData.data.fields.sort(function (
-      //   a,
-      //   b
-      // ) {
-      //   return a.sort_order - b.sort_order;
-      // });
+      const sortedFields = registerRequestData.data.fields.sort(function (
+        a,
+        b
+      ) {
+        return a.sort_order - b.sort_order;
+      });
 
-      setFields(registerRequestData.data.fields);
+      setFields(sortedFields);
     }
   };
 
@@ -115,6 +117,7 @@ export const PageProvider = ({ children }) => {
     const page = pages.filter((page) => page.Id === id)[0];
     setPage(page);
     getAllFieldByPage(page);
+    setIsOpen(true);
   };
 
   const addNewPage = async (e) => {
@@ -140,6 +143,7 @@ export const PageProvider = ({ children }) => {
     if (registerRequestData.status) {
       setPages([...pages, { ...registerRequestData.data }]);
     }
+    setIsOpen(!isOpen);
   };
 
   const addNewField = async (e) => {
@@ -205,7 +209,6 @@ export const PageProvider = ({ children }) => {
       setPages([...pages]);
     }
   };
-  //==========================================================================================
 
   const removeField = async (e, id) => {
     e.preventDefault();
@@ -277,30 +280,28 @@ export const PageProvider = ({ children }) => {
     [fields]
   );
 
-  // const updateFields = async () => {
-  //   let registerRequest;
-  //   try {
-  //     registerRequest = await axios.patch(
-  //       `${config.SERVER_URL}/api/v1/fields/update/all`,
-  //       {
-  //         fields: fields,
-  //       },
-  //       {
-  //         headers: {
-  //           authorization: `Bearer ${user._token}`,
-  //         },
-  //       }
-  //     );
-  //   } catch ({ response }) {
-  //     registerRequest = response;
-  //   }
+  const updateFields = async (allFields) => {
+    let registerRequest;
+    try {
+      registerRequest = await axios.patch(
+        `${config.SERVER_URL}/api/v1/fields/update/all`,
+        {
+          fields: allFields,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${user._token}`,
+          },
+        }
+      );
+    } catch ({ response }) {
+      registerRequest = response;
+    }
+    const { data: registerRequestData } = registerRequest;
+    if (registerRequestData.status) {
+    }
+  };
 
-  //   const { data: registerRequestData } = registerRequest;
-  //   if (registerRequestData.status) {
-  //     setFields(registerRequestData.data);
-  //   }
-  // };
-  //==========================================================================================
   const contextData = {
     handleTitleChange,
     addNewPage,
@@ -315,6 +316,8 @@ export const PageProvider = ({ children }) => {
     removeField,
     onKeyDownField,
     moveField,
+    updateFields,
+    isOpen,
   };
 
   return (

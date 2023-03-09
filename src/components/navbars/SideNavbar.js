@@ -48,7 +48,6 @@ const SideNavbar = () => {
           <List
             sx={{
               overflow: "auto",
-
               height: "80vh",
             }}
           >

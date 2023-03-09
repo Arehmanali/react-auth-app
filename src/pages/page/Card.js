@@ -4,19 +4,7 @@ import EditableTextField from "./EditableTextField";
 import { Box } from "@mui/material";
 import Delete from "@mui/icons-material/Delete";
 
-const style = {
-  backgroundColor: "white",
-  cursor: "move",
-};
-
-export const Card = ({
-  id,
-  text,
-  sort_order,
-  moveCard,
-  onKeyDown,
-  removeField,
-}) => {
+export const Card = ({ id, text, index, moveCard, onKeyDown, removeField }) => {
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
     accept: "card",
@@ -29,8 +17,8 @@ export const Card = ({
       if (!ref.current) {
         return;
       }
-      const dragIndex = item.sort_order;
-      const hoverIndex = sort_order;
+      const dragIndex = item.index;
+      const hoverIndex = index;
       if (dragIndex === hoverIndex) {
         return;
       }
@@ -48,13 +36,13 @@ export const Card = ({
       }
       moveCard(dragIndex, hoverIndex);
 
-      item.sort_order = hoverIndex;
+      item.index = hoverIndex;
     },
   });
   const [{ isDragging }, drag] = useDrag({
     type: "card",
     item: () => {
-      return { id, sort_order };
+      return { id, index };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -81,4 +69,9 @@ export const Card = ({
       </Box>
     </div>
   );
+};
+
+const style = {
+  backgroundColor: "white",
+  cursor: "move",
 };

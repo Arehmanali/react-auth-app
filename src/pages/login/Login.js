@@ -83,6 +83,9 @@ const Login = () => {
                       <TextField
                         type="email"
                         placeholder="Email"
+                        helperText={
+                          error && <span style={{ color: "red" }}>{error}</span>
+                        }
                         fullWidth
                         name="email"
                         variant="outlined"

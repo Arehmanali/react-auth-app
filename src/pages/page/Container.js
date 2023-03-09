@@ -1,22 +1,39 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import PageContext from "../../context/PageContext.js";
 import { Card } from "./Card.js";
 import Add from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 
-const style = {
-  width: 400,
-};
 export const Container = () => {
-  const { fields, moveField, onKeyDownField, removeField, addNewField } =
-    useContext(PageContext);
+  const {
+    fields,
+    moveField,
+    onKeyDownField,
+    removeField,
+    addNewField,
+    updateFields,
+  } = useContext(PageContext);
+
+  useEffect(() => {
+    const setTheSorting = () => {
+      const sortedArray = [];
+      if (fields && fields.length > 1) {
+        fields.map((field, index) =>
+          sortedArray.push({ ...field, sort_order: index })
+        );
+        updateFields(sortedArray);
+      }
+    };
+
+    setTheSorting();
+  }, [fields]);
 
   const renderCard = useCallback(
     (field, index) => {
       return (
         <Card
           key={field.Id}
-          sort_order={field.sort_order}
+          index={index}
           id={field.Id}
           text={field.name}
           moveCard={moveField}
@@ -45,4 +62,8 @@ export const Container = () => {
       </Box>
     </>
   );
+};
+
+const style = {
+  width: 400,
 };

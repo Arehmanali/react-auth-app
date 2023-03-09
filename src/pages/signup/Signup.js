@@ -1,19 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField, Grid, Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import config from "../../config";
-import AuthContext from "../../context/AuthContext";
 
 const Signup = () => {
   const classes = useStyles();
-  const { responseErrors } = useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState({
     password: "",
     confirmPassword: "",
-    responseMessage: responseErrors && responseErrors,
+    responseMessage: "",
   });
 
   const handleSubmit = async (e) => {
@@ -106,6 +104,13 @@ const Signup = () => {
                       <TextField
                         type="email"
                         placeholder="Email"
+                        helperText={
+                          error.responseMessage && (
+                            <span style={{ color: "red" }}>
+                              {error.responseMessage}
+                            </span>
+                          )
+                        }
                         fullWidth
                         name="email"
                         variant="outlined"

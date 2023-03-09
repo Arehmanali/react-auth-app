@@ -1,18 +1,16 @@
 import React, { useContext } from "react";
-import { Box, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { Box } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Container } from "./Container";
-import Add from "@mui/icons-material/Add";
+import Edit from "@mui/icons-material/Edit";
 import HeaderTextField from "./HeaderTextField";
 import PageContext from "../../context/PageContext";
 
 const Page = () => {
-  const classes = useStyles();
-  const { EditExistingPage } = useContext(PageContext);
+  const { EditExistingPage, isOpen } = useContext(PageContext);
 
-  return (
+  return isOpen ? (
     <Box
       display="flex"
       justifyContent="center"
@@ -23,19 +21,17 @@ const Page = () => {
       <form onSubmit={EditExistingPage}>
         <Box display="flex" justifylContent="space-around" alignItems="center">
           <HeaderTextField />
-          <IconButton type="submit">
-            <Add
-              fontSize="large"
-              sx={{
-                ml: 1,
-                color: "grey",
-                "&:hover": {
-                  color: "green",
-                  cursor: "pointer",
-                },
-              }}
-            />
-          </IconButton>
+          <Edit
+            fontSize="medium"
+            sx={{
+              ml: 1,
+              color: "grey",
+              "&:hover": {
+                color: "green",
+                cursor: "pointer",
+              },
+            }}
+          />
         </Box>
 
         <hr />
@@ -46,9 +42,9 @@ const Page = () => {
         </div>
       </form>
     </Box>
+  ) : (
+    ""
   );
 };
-
-const useStyles = makeStyles({});
 
 export default Page;
