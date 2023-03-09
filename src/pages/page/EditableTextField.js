@@ -1,27 +1,27 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
-import PageContext from "../../context/PageContext";
 
-const EditableTextField = ({ onKeyDown }) => {
-  const { handleFieldChange, page } = useContext(PageContext);
+const EditableTextField = ({ text, onKeyDown }) => {
   const classes = useStyles();
+  const [field, setField] = useState(text);
+
+  const handleFieldChange = (e) => {
+    e.preventDefault();
+    setField(e.target.value);
+  };
 
   return (
     <>
-      {page.fields.map((field) => {
-        return (
-          <input
-            className={classes.inputField}
-            placeholder={"Add Field Text"}
-            type="text"
-            aria-label={"field"}
-            name={"field"}
-            value={field.name}
-            onChange={handleFieldChange}
-            onKeyDown={onKeyDown}
-          />
-        );
-      })}
+      <input
+        className={classes.inputField}
+        placeholder={"Add Field Text"}
+        type="text"
+        aria-label={"field"}
+        name={"field"}
+        value={field}
+        onChange={handleFieldChange}
+        onKeyDown={onKeyDown}
+      />
     </>
   );
 };

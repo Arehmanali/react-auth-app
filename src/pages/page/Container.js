@@ -1,27 +1,26 @@
-import update from "immutability-helper";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext } from "react";
 import PageContext from "../../context/PageContext.js";
 import { Card } from "./Card.js";
+import Add from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
 
 const style = {
   width: 400,
 };
 export const Container = () => {
-  const { fields, moveField, onKeyDownField, removeField } =
+  const { fields, moveField, onKeyDownField, removeField, addNewField } =
     useContext(PageContext);
 
-  const { page } = useContext(PageContext);
-
   const renderCard = useCallback(
-    (card, index) => {
+    (field, index) => {
       return (
         <Card
-          key={card.id}
-          index={index}
-          id={card.id}
-          text={card.text}
+          key={field.Id}
+          sort_order={field.sort_order}
+          id={field.Id}
+          text={field.name}
           moveCard={moveField}
-          onKeyDown={onKeyDownField}
+          onKeyDown={(e) => onKeyDownField(e, field.Id)}
           removeField={removeField}
         />
       );
@@ -31,6 +30,19 @@ export const Container = () => {
   return (
     <>
       <div style={style}>{fields.map((card, i) => renderCard(card, i))}</div>
+      <Box display="flex" alignItems="center">
+        <Add
+          onClick={(e) => addNewField(e)}
+          fontSize="medium"
+          sx={{
+            color: "grey",
+            "&:hover": {
+              color: "green",
+              cursor: "pointer",
+            },
+          }}
+        />
+      </Box>
     </>
   );
 };

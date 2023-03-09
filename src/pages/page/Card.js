@@ -9,7 +9,14 @@ const style = {
   cursor: "move",
 };
 
-export const Card = ({ id, text, index, moveCard, onKeyDown, removeField }) => {
+export const Card = ({
+  id,
+  text,
+  sort_order,
+  moveCard,
+  onKeyDown,
+  removeField,
+}) => {
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
     accept: "card",
@@ -22,8 +29,8 @@ export const Card = ({ id, text, index, moveCard, onKeyDown, removeField }) => {
       if (!ref.current) {
         return;
       }
-      const dragIndex = item.index;
-      const hoverIndex = index;
+      const dragIndex = item.sort_order;
+      const hoverIndex = sort_order;
       if (dragIndex === hoverIndex) {
         return;
       }
@@ -41,13 +48,13 @@ export const Card = ({ id, text, index, moveCard, onKeyDown, removeField }) => {
       }
       moveCard(dragIndex, hoverIndex);
 
-      item.index = hoverIndex;
+      item.sort_order = hoverIndex;
     },
   });
   const [{ isDragging }, drag] = useDrag({
     type: "card",
     item: () => {
-      return { id, index };
+      return { id, sort_order };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -58,7 +65,7 @@ export const Card = ({ id, text, index, moveCard, onKeyDown, removeField }) => {
   return (
     <div ref={ref} style={{ ...style, opacity }} data-handler-id={handlerId}>
       <Box display="flex" justifylContent="space-around" alignItems="center">
-        <EditableTextField onKeyDown={onKeyDown} />
+        <EditableTextField text={text} onKeyDown={onKeyDown} />
         <Delete
           onClick={(e) => removeField(e, id)}
           fontSize="small"

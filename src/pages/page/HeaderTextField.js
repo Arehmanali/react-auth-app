@@ -13,7 +13,7 @@ const HeaderTextField = ({ onKeyDown }) => {
       type="text"
       aria-label={"header"}
       name={"header"}
-      value={page.name === "Untitled" ? "" : page.name}
+      value={page.name}
       onChange={handleTitleChange}
       onKeyDown={onKeyDown}
     />

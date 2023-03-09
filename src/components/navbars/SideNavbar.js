@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -44,60 +44,85 @@ const SideNavbar = () => {
         </Toolbar>
 
         <Divider />
-        <List>
-          {pages &&
-            pages.map((text, index) => (
-              <ListItem key={text} display="flex" justifyContent="space-around">
-                <ListItemText
-                  disablePadding
-                  onClick={(e) => handleClick(e, text.id)}
-                  primary={text.name}
-                  sx={{
-                    "&:hover": {
-                      color: "blue",
-                      cursor: "pointer",
-                    },
-                  }}
-                />
-                <ListItemIcon>
-                  <Delete
+        <Box>
+          <List
+            sx={{
+              overflow: "auto",
+
+              height: "80vh",
+            }}
+          >
+            {pages &&
+              pages.map((page, index) => (
+                <ListItem
+                  key={page}
+                  display="flex"
+                  justifyContent="space-around"
+                >
+                  <ListItemText
+                    disablePadding
                     onClick={(e) => {
-                      removePage(e, text.id);
+                      handleClick(e, page.Id);
                     }}
-                    fontSize="small"
+                    primary={page.name}
                     sx={{
-                      ml: 1,
-                      color: "grey",
                       "&:hover": {
-                        color: "red",
+                        color: "blue",
                         cursor: "pointer",
                       },
                     }}
                   />
-                </ListItemIcon>
-              </ListItem>
-            ))}
-          <ListItem key={"new page"}>
-            <ListItemButton onClick={addNewPage}>
-              <Add />
-              <ListItemText sx={{ ml: 1 }} disablePadding primary={"Page"} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-
-        <List sx={{ bottom: 0, position: "fixed" }}>
-          <ListItem
-            components={Button}
-            onClick={logoutUser}
-            key={"logout"}
-            disablePadding
+                  <ListItemIcon>
+                    <Delete
+                      onClick={(e) => {
+                        removePage(e, page.Id);
+                      }}
+                      fontSize="small"
+                      sx={{
+                        ml: 1,
+                        color: "grey",
+                        "&:hover": {
+                          color: "red",
+                          cursor: "pointer",
+                        },
+                      }}
+                    />
+                  </ListItemIcon>
+                </ListItem>
+              ))}
+            <ListItem key={"new page"}>
+              <ListItemButton onClick={addNewPage}>
+                <Add />
+                <ListItemText sx={{ ml: 1 }} disablePadding primary={"Page"} />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
+        <Divider sx={{ my: "10px" }} />
+        <Box>
+          <List
+            sx={{
+              bottom: 0,
+              position: "fixed",
+            }}
           >
-            <ListItemButton disablePadding>
-              <ExitToApp />
-              <ListItemText disablePadding sx={{ ml: 1 }} primary={"Logout"} />
-            </ListItemButton>
-          </ListItem>
-        </List>
+            <ListItem
+              components={Button}
+              onClick={logoutUser}
+              key={"logout"}
+              disablePadding
+            >
+              <ListItemButton disablePadding>
+                <ExitToApp />
+                <ListItemText
+                  disablePadding
+                  sx={{ ml: 1 }}
+                  primary={"Logout"}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
       </Drawer>
     </Box>
   );

@@ -11,14 +11,18 @@ const App = () => {
   let { user } = useContext(AuthContext);
   return (
     <>
-      {user ? "" : <TopNavbar />}
+      {user && user.email ? "" : <TopNavbar />}
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
-        <Route path="/" index element={user ? <Home /> : <Login />} />
+        <Route
+          path="/"
+          index
+          element={user && user.email ? <Home /> : <Login />}
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {user ? "" : <Footer />}
+      {user && user.email ? "" : <Footer />}
     </>
   );
 };
